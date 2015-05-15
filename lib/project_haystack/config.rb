@@ -23,7 +23,6 @@ module ProjectHaystack
       project = projects[project_name]
       throw "unrecognized project #{project_name}" if project.nil?
       url = "https://#{project['base_url']}"
-      puts "faraday url #{url}"
       conn ||= Faraday.new(:url => url) do |faraday|
         faraday.request  :url_encoded             # form-encode POST params
         faraday.response :logger                  # log requests to STDOUT
