@@ -1,21 +1,18 @@
 require 'spec_helper'
 describe ProjectHaystack::Config do
-  describe '.connection' do
-    context 'defined project name' do
+  describe '.projects' do
+    context 'good config file' do
       before do
-        @demo = ProjectHaystack::Config.connection 'demo'
+        @projects = ProjectHaystack::Config.projects
+        @demo = @projects['demo']
       end
-      it 'returns valid Faraday connection' do
-        expect(@demo).to be_a_kind_of Faraday::Connection
-      end
-      it 'sets Authorization header' do
-        expect(@demo.headers['Authorization']).to_not be_nil
-      end
-      it 'accepts json' do
-        expect(@demo.headers['Accept']).to eq 'application/json'
+      it 'returns a project' do
+        expect(@demo).to be_a_kind_of ProjectHaystack::Project
       end
     end
-    context 'undefined project name' do
+    context 'bad project in config file' do
+    end
+    context 'missing config file' do
     end
   end
 end

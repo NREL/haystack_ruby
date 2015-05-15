@@ -22,3 +22,4 @@
 require 'faraday'
 require 'project_haystack/config'
 require 'project_haystack/point'
+require 'project_haystack/project'

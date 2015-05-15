@@ -14,22 +14,18 @@ module ProjectHaystack
       # end
     end
     # TODO run this on init as load! method
+    # returns array of ProjectHaystack::Projects
     def projects
       require 'yaml'
-      @projects ||= YAML.load(File.new(config_file).read)[ENVIRONMENT]
+      if @project_configs.nil? && @projects.nil? 
+        @project_configs = YAML.load(File.new(config_file).read)[ENVIRONMENT]
+        @projects = {}
+        @project_configs.map do |name, config|
+          p = Project.new(name, config)
+          @projects[name] = p if p.valid?
+        end
+      end
+      @projects
     end
-    # should be singleton
-    def connection(project_name)
-      project = projects[project_name]
-      throw "unrecognized project #{project_name}" if project.nil?
-      url = "https://#{project['base_url']}"
-      conn ||= Faraday.new(:url => url) do |faraday|
-        faraday.request  :url_encoded             # form-encode POST params
-        faraday.response :logger                  # log requests to STDOUT
-        faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
-        faraday.headers['Authorization'] = "Basic #{project['credentials']}"
-        faraday.headers['Accept'] = 'application/json'
-    end
-  end
   end
 end
