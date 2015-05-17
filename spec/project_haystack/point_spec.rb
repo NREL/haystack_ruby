@@ -17,13 +17,29 @@ describe ProjectHaystack::Point do
   describe '#hisRead' do
     context 'valid id and range' do
       before do
-        @res = @point.his_read('"yesterday"')
+        @res = @point.his_read('yesterday')
       end
       it 'returns 2 columns' do
         expect(@res['cols'].count).to eq 2
       end
       it 'returns array of rows' do
         expect(@res['rows']).to be_a_kind_of Array
+      end
+    end
+  end
+  describe '#data' do
+    context 'valid id and range' do
+      before do
+        @data = @point.data('yesterday')
+        @d = @data.first
+      end
+      it 'returns data with expected format' do
+        @d = @data.first
+        expect(@d[:time]).to_not be_nil 
+        expect(@d[:value]).to_not be_nil
+      end
+      it 'returns time as epoch' do
+        expect(@d[:time]).to be_a_kind_of Integer
       end
     end
   end
