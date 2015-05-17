@@ -3,7 +3,7 @@ module ProjectHaystack
   require 'pp'
   # may consider making this a mixin instead
   class Project
-    HAYSTACK_VERSION = '2.0' #todo make this configurable
+    
     attr_accessor :name, :config #required
     def initialize(name, config)
       @name = name
@@ -22,7 +22,7 @@ module ProjectHaystack
     end
 
     def read(params)
-      body = ["ver:\"#{HAYSTACK_VERSION}\""]
+      body = ["ver:\"#{Config.haystack_version}\""]
       body << params.keys.join(',')
       body << params.values.join(',')
       res = self.connection.post('read') do |req|

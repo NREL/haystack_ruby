@@ -13,7 +13,9 @@ module ProjectHaystack
        '/Users/apeterse/projects/project_haystack/config/example.yml'
       # end
     end
-    # TODO run this on init as load! method
+    def haystack_version 
+      '2.0'
+    end
     # returns array of ProjectHaystack::Projects
     def projects
       require 'yaml'
