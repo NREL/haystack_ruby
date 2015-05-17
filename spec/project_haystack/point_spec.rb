@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'models/point_demo'
 describe ProjectHaystack::Point do
   before do
-    @point = PointDemo.new('demo','@ShortPump.ElecMeter-Main.kWh')
+    @point = PointDemo.new('demo','@ShortPump.ElecMeter-Main.kWh','New_York')
   end
   describe '#haystack_project' do
     context 'real project name' do
@@ -65,7 +65,7 @@ describe ProjectHaystack::Point do
         expect(data.count).to be > 0
       end
       it 'returns data when range is start DateTime (no end)' do
-        data = @point.data([Date.today.prev_day, Date.today])
+        data = @point.data([Date.today.prev_day.to_datetime])
         expect(data.count).to be > 0
       end
     end

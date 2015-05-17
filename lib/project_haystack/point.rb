@@ -12,6 +12,7 @@ module ProjectHaystack
 
     def his_read(range)
       query = ["ver:\"#{Config.haystack_version}\"",'id,range',"#{haystack_point_id},\"#{range}\""]
+      pp query.join "\n"
       res = connection.post('hisRead') do |req|
         req.headers['Content-Type'] = 'text/plain'
         req.body = query.join("\n")
@@ -20,11 +21,13 @@ module ProjectHaystack
     end
 
     def meta
+      # TODO set / refresh haystack_time_zone from the tx in returned data
       # read request on project to load current info, including tags and timezone
       res = haystack_project.read({:id => haystack_point_id})['rows'].first
     end
 
     def data(range)
+      pp range
       # clean up the range argument before passing through to hisRead
       # ----------------
       # from haystack docs:
@@ -33,17 +36,18 @@ module ProjectHaystack
       # ----------------
       if range.kind_of? Array 
         range.map! do |r|
-          r.to_s if r.kind_of? Date
+          # order of type check matters here as a DateTime is a type of both Date and DateTime
+          if r.kind_of? DateTime
+            # TODO check that datetime passed in actually matches the haystack time zone of the point.
+            "#{r.to_s} #{haystack_time_zone}" if r.kind_of? DateTime
+          elsif r.kind_of? Date
+            r.to_s
+          else
+            r 
+          end
         end
-        range = range.join(',')
       end
-      if range.kind_of? Date
-        range = range.to_s
-      end
-      if range.kind_of? DateTime
-        # Ex: 2009-11-09T15:39:00Z
-      end
-
+  
       res = his_read range
       reformat_timeseries(res['rows'])
     end
