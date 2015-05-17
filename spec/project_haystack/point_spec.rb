@@ -27,6 +27,15 @@ describe ProjectHaystack::Point do
       end
     end
   end
+  
+  describe '#meta' do
+    context 'valid id' do
+      it 'returns metadata for the point' do
+        expect(@point.meta).to be_a_kind_of Hash 
+      end
+    end
+  end
+
   describe '#data' do
     context 'valid id and range' do
       before do
@@ -40,6 +49,24 @@ describe ProjectHaystack::Point do
       end
       it 'returns time as epoch' do
         expect(@d[:time]).to be_a_kind_of Integer
+      end
+    end
+    context 'various range formats' do
+      it 'returns data when range is array start and end Dates' do
+        data = @point.data([Date.today.prev_day, Date.today])
+        expect(data.count).to be > 0
+      end
+      it 'returns data when range is start Date (no end)' do
+        data = @point.data([Date.today.prev_day])
+        expect(data.count).to be > 0
+      end
+      it 'returns data when range is array start and end DateTimes' do
+        data = @point.data([Date.today.prev_day.to_datetime, Date.today.to_datetime])
+        expect(data.count).to be > 0
+      end
+      it 'returns data when range is start DateTime (no end)' do
+        data = @point.data([Date.today.prev_day, Date.today])
+        expect(data.count).to be > 0
       end
     end
   end
