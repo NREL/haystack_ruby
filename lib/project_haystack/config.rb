@@ -1,7 +1,7 @@
 module ProjectHaystack
   module Config
     extend self
-    ENVIRONMENT = 'development'
+    ENVIRONMENT = ENV['RAILS_ENV'] || 'development'
     def config_file
       # TODO use railtie to try loading config/project_haystack.yml
       # and set as @config_file

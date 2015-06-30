@@ -4,7 +4,7 @@ module ProjectHaystack
   # may consider making this a mixin instead
   class Project
     
-    attr_accessor :name, :config #required
+    attr_accessor :name, :config, :haystack_time_zone #required
     def initialize(name, config)
       @name = name
       @config = config

@@ -1,7 +1,11 @@
 require 'date'
+# require 'active_support'
 module ProjectHaystack
   module Point
-    # haystack_project_name is required where this module is mixed in
+    # extend ::ActiveSupport::Concern
+    # attr_accessible :haystack_project_name, :haystack_point_id
+    # haystack_project_name, :haystack_point_id are required where this module is mixed in
+
     def haystack_project
       ProjectHaystack::Config.projects[@haystack_project_name]
     end
