@@ -1,9 +1,7 @@
 Project Haystack Adapter
 ---
 
-To use in context of Rails application
- 
-- Add config file [..document where this goes..]
+*Need a better name!*
 
 ### Projects
 - Load a project using name specified in config file: 
