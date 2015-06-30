@@ -39,11 +39,10 @@ describe ProjectHaystack::Point do
   describe '#data' do
     context 'valid id and range' do
       before do
-        @data = @point.data('yesterday')
+        @data = @point.data('2015-06-15')
         @d = @data.first
       end
       it 'returns data with expected format' do
-        @d = @data.first
         expect(@d[:time]).to_not be_nil 
         expect(@d[:value]).to_not be_nil
       end
@@ -53,15 +52,15 @@ describe ProjectHaystack::Point do
     end
     context 'various range formats' do
       it 'returns data when range is array start and end Dates' do
-        data = @point.data([Date.today.prev_day, Date.today])
+        data = @point.data([Date.parse('2015-06-15'), Date.parse('2015-06-16')])
         expect(data.count).to be > 0
       end
       it 'returns data when range is start Date (no end)' do
-        data = @point.data([Date.today.prev_day])
+        data = @point.data(['2015-06-15'])
         expect(data.count).to be > 0
       end
       it 'returns data when range is array start and end DateTimes' do
-        data = @point.data([Date.today.prev_day.to_datetime, Date.today.to_datetime])
+        data = @point.data([Date.parse('2015-06-15').to_datetime, Date.parse('2015-06-16').to_datetime])
         expect(data.count).to be > 0
       end
       it 'returns data when range is start DateTime (no end)' do
