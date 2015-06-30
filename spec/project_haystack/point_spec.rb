@@ -39,11 +39,10 @@ describe ProjectHaystack::Point do
   describe '#data' do
     context 'valid id and range' do
       before do
-        @data = @point.data('yesterday')
+        @data = @point.data('2015-06-15')
         @d = @data.first
       end
       it 'returns data with expected format' do
-        @d = @data.first
         expect(@d[:time]).to_not be_nil 
         expect(@d[:value]).to_not be_nil
       end
