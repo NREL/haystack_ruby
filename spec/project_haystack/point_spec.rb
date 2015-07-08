@@ -39,7 +39,7 @@ describe ProjectHaystack::Point do
   describe '#data' do
     context 'valid id and range' do
       before do
-        @data = @point.data('2015-06-15')
+        @data = @point.data(Date.parse('2015-06-15'))
         @d = @data.first
       end
       it 'returns data with expected format' do
@@ -51,20 +51,46 @@ describe ProjectHaystack::Point do
       end
     end
     context 'various range formats' do
-      it 'returns data when range is array start and end Dates' do
-        data = @point.data([Date.parse('2015-06-15'), Date.parse('2015-06-16')])
+      context 'Array of Dates' do
+        it 'returns data when two ascending Date values' do
+          data = @point.data([Date.parse('2015-06-15'), Date.parse('2015-06-16')])
+          expect(data.count).to be > 0
+        end
+        it 'throws error start is after finish' do
+          expect {
+            data = @point.data([Date.parse('2015-06-16'), Date.parse('2015-06-15')])
+          }.to raise_error ArgumentError
+        end
+        it 'returns data when one value' do
+          data = @point.data([Date.parse('2015-06-15')])
+          expect(data.count).to be > 0
+        end
+      end
+      context 'Array of DateTimes' do 
+        it 'returns data when two ascending DateTime values' do
+          data = @point.data([Date.parse('2015-06-15').to_datetime, Date.parse('2015-06-16').to_datetime])
+          expect(data.count).to be > 0
+        end
+        it 'throws error start is after finish' do
+          expect {
+            @point.data([Date.parse('2015-06-16').to_datetime, Date.parse('2015-06-15').to_datetime])
+            }.to raise_error ArgumentError
+
+        end
+        it 'returns data when one value' do
+          data = @point.data([Date.parse('2015-06-15').to_datetime])
+          expect(data.count).to be > 0
+        end
+      end
+      it 'returns data when range is Date' do
+        data = @point.data(Date.parse('2015-06-15'))
         expect(data.count).to be > 0
       end
-      it 'returns data when range is start Date (no end)' do
-        data = @point.data(['2015-06-15'])
-        expect(data.count).to be > 0
+      it 'does not accept string values for range' do
+        expect { data = @point.data('2015-06-15') }.to raise_error ArgumentError
       end
-      it 'returns data when range is array start and end DateTimes' do
-        data = @point.data([Date.parse('2015-06-15').to_datetime, Date.parse('2015-06-16').to_datetime])
-        expect(data.count).to be > 0
-      end
-      it 'returns data when range is start DateTime (no end)' do
-        data = @point.data([Date.today.prev_day.to_datetime])
+      it 'returns data when range is start DateTime' do
+        data = @point.data(Date.parse('2015-06-15').to_datetime)
         expect(data.count).to be > 0
       end
     end

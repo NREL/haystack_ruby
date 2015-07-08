@@ -7,10 +7,18 @@
 module ProjectHaystack
   class Range
     def initialize(range,time_zone)
-      throw 'invalid range' if range.kind_of? Array and range.size > 2
       @haystack_time_zone = time_zone
-      @start = (range.kind_of? Array) ? format(range.first) : format(range)
-      @finish = (range.kind_of? Array) ? format(range.last) : nil
+      @finish = nil
+      if range.kind_of? Array 
+        raise ArgumentError, 'Too many values for range' if range.count > 2
+        @start = format(range.first) 
+        if range.count > 1
+          @finish = format(range.last)
+          raise ArgumentError, 'Start must be before End' if DateTime.parse(@start) >= DateTime.parse(@finish)
+        end
+      else
+        @start = format(range)
+      end
     end
     
     def format(dt)
@@ -20,7 +28,7 @@ module ProjectHaystack
       elsif dt.kind_of? Date
         dt.to_s
       else
-        dt 
+        raise ArgumentError, 'Start and end must be Date or DateTime'
       end
     end
 
