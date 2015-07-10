@@ -2,14 +2,24 @@ PATH
   remote: .
   specs:
     project_haystack (0.0.0)
+      activesupport
       faraday (~> 0.9.1)
 
 GEM
   remote: http://rubygems.org/
   specs:
+    activesupport (4.2.1)
+      i18n (~> 0.7)
+      json (~> 1.7, >= 1.7.7)
+      minitest (~> 5.1)
+      thread_safe (~> 0.3, >= 0.3.4)
+      tzinfo (~> 1.1)
     diff-lcs (1.2.5)
     faraday (0.9.1)
       multipart-post (>= 1.2, < 3)
+    i18n (0.7.0)
+    json (1.8.3)
+    minitest (5.7.0)
     multipart-post (2.0.0)
     rspec (3.2.0)
       rspec-core (~> 3.2.0)
@@ -24,6 +34,9 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.2.0)
     rspec-support (3.2.2)
+    thread_safe (0.3.5)
+    tzinfo (1.2.2)
+      thread_safe (~> 0.1)
 
 PLATFORMS
   ruby
