@@ -4,10 +4,14 @@ module ProjectHaystack
   module Point
     # extend ::ActiveSupport::Concern
     # attr_accessible :haystack_project_name, :haystack_point_id
-    # haystack_project_name, :haystack_point_id are required where this module is mixed in
+
+    # is this Point valid for purposees of Project Haystack Integration?  
+    def haystack_valid?
+      return self.haystack_project_name.present? && self.haystack_point_id.present? && self.haystack_time_zone.present?
+    end
 
     def haystack_project
-      @project ||= ProjectHaystack::Config.projects[@haystack_project_name]
+      @project ||= ProjectHaystack::Config.projects[self.haystack_project_name]
     end
 
     def connection
@@ -15,7 +19,7 @@ module ProjectHaystack
     end
 
     def his_read(range)
-      query = ["ver:\"#{haystack_project.haystack_version}\"",'id,range',"#{haystack_point_id},\"#{range}\""]
+      query = ["ver:\"#{haystack_project.haystack_version}\"",'id,range',"#{self.haystack_point_id},\"#{range}\""]
       pp query.join "\n"
       res = connection.post('hisRead') do |req|
         req.headers['Content-Type'] = 'text/plain'
