@@ -25,3 +25,6 @@ require 'project_haystack/point'
 require 'project_haystack/project'
 require 'project_haystack/range'
 require 'active_support/core_ext/hash'
+if defined?(Rails)
+  require "project_haystack/railtie"
+end
