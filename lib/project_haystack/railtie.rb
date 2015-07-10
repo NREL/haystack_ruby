@@ -3,7 +3,7 @@ module Rails
   module ProjectHaystack
     class Railtie < Rails::Railtie
         initializer "project_haystack.load-config" do
-        puts config_file = Rails.root.join("config", "project_haystack.yml")
+        config_file = Rails.root.join("config", "project_haystack.yml")
         if config_file.file?
           begin
             ::ProjectHaystack::Config.load!(config_file)
