@@ -41,7 +41,7 @@ module ProjectHaystack
       range << finish unless finish.nil?
       # clean up the range argument before passing through to hisRead
       # ----------------
-      r = ProjectHaystack::Range.new(range, @haystack_time_zone)
+      r = ProjectHaystack::Range.new(range, self.haystack_time_zone)
   
       res = his_read r.to_s
       reformat_timeseries(res['rows'])
@@ -51,7 +51,7 @@ module ProjectHaystack
     def reformat_timeseries data
       data.map do |d|
         # may not keep unit
-        {:time => DateTime.parse(d['ts']).to_time.to_i, :value => d['val'], :unit => ['val.unit']}
+        {:time => DateTime.parse(d['ts']).to_time.to_i, :value => d['val'], :unit => d['val.unit']}
       end
     end
   end
