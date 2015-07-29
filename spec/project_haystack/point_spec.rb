@@ -51,34 +51,34 @@ describe ProjectHaystack::Point do
       end
     end
     context 'various range formats' do
-      context 'Array of Dates' do
+      context 'Dates' do
         it 'returns data when two ascending Date values' do
-          data = @point.data([Date.parse('2015-06-15'), Date.parse('2015-06-16')])
+          data = @point.data(Date.parse('2015-06-15'), Date.parse('2015-06-16'))
           expect(data.count).to be > 0
         end
         it 'throws error start is after finish' do
           expect {
-            data = @point.data([Date.parse('2015-06-16'), Date.parse('2015-06-15')])
+            data = @point.data(Date.parse('2015-06-16'), Date.parse('2015-06-15'))
           }.to raise_error ArgumentError
         end
-        it 'returns data when one value' do
-          data = @point.data([Date.parse('2015-06-15')])
+        it 'returns data when no finish' do
+          data = @point.data(Date.parse('2015-06-15'))
           expect(data.count).to be > 0
         end
       end
-      context 'Array of DateTimes' do 
+      context 'DateTimes' do 
         it 'returns data when two ascending DateTime values' do
-          data = @point.data([Date.parse('2015-06-15').to_datetime, Date.parse('2015-06-16').to_datetime])
+          data = @point.data(Date.parse('2015-06-15').to_datetime, Date.parse('2015-06-16').to_datetime)
           expect(data.count).to be > 0
         end
         it 'throws error start is after finish' do
           expect {
-            @point.data([Date.parse('2015-06-16').to_datetime, Date.parse('2015-06-15').to_datetime])
+            @point.data(Date.parse('2015-06-16').to_datetime, Date.parse('2015-06-15').to_datetime)
             }.to raise_error ArgumentError
 
         end
         it 'returns data when one value' do
-          data = @point.data([Date.parse('2015-06-15').to_datetime])
+          data = @point.data(Date.parse('2015-06-15').to_datetime)
           expect(data.count).to be > 0
         end
       end

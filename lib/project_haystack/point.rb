@@ -34,7 +34,11 @@ module ProjectHaystack
       res = haystack_project.read({:id => haystack_point_id})['rows'].first
     end
 
-    def data(range)
+    def data(start, finish = nil, as_datetime = false) # as_datetime currently ignored
+      return unless haystack_valid? #may choose to throw exception instead
+
+      range = [start]
+      range << finish unless finish.nil?
       # clean up the range argument before passing through to hisRead
       # ----------------
       r = ProjectHaystack::Range.new(range, @haystack_time_zone)
