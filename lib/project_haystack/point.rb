@@ -34,6 +34,19 @@ module ProjectHaystack
       res = haystack_project.read({:id => haystack_point_id})['rows'].first
     end
 
+    # data is ascending array of hashes with format: {time: epochtime, value: myvalue}
+    def his_write(data)
+      query = 
+        ["ver:\"#{haystack_project.haystack_version}\" id:#{self.haystack_point_id}",'ts,val'] + data.map{ |d| "#{d[:time]},#{d[:value]}"}
+        # puts 'his_write query updated:'
+        # pp  query.join "\n"
+      res = connection.post('hisWrite') do |req|
+        req.headers['Content-Type'] = 'text/plain'
+        req.body = query.join("\n")
+      end
+      JSON.parse(res.body)['meta']['ok'].present?
+    end
+
     def data(start, finish = nil, as_datetime = false) # as_datetime currently ignored
       return unless haystack_valid? #may choose to throw exception instead
 

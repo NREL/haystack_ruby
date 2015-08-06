@@ -27,6 +27,17 @@ describe ProjectHaystack::Point do
       end
     end
   end
+  describe '#hisWrite' do
+    context 'valid data' do
+      before do
+        data = [{time: "#{DateTime.now.to_s} #{@point.haystack_time_zone}", value: 4}]
+        @res = @point.his_write(data)
+      end
+      it 'returns true' do
+        expect(@res).to eq true
+      end
+    end
+  end
   
   describe '#meta' do
     context 'valid id' do
