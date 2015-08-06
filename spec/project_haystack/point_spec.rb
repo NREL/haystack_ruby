@@ -14,7 +14,7 @@ describe ProjectHaystack::Point do
       end
     end
   end
-  describe '#hisRead' do
+  describe '#his_read' do
     context 'valid id and range' do
       before do
         @res = @point.his_read('yesterday')
@@ -27,11 +27,22 @@ describe ProjectHaystack::Point do
       end
     end
   end
-  describe '#hisWrite' do
+  describe '#his_write' do
     context 'valid data' do
       before do
         data = [{time: "#{DateTime.now.to_s} #{@point.haystack_time_zone}", value: 4}]
         @res = @point.his_write(data)
+      end
+      it 'returns true' do
+        expect(@res).to eq true
+      end
+    end
+  end
+  describe '#write_data' do
+    context 'valid data' do
+      before do
+        data = [{time: DateTime.now, value: -1}]
+        @res = @point.write_data(data)
       end
       it 'returns true' do
         expect(@res).to eq true

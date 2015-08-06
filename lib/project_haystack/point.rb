@@ -38,12 +38,14 @@ module ProjectHaystack
     def his_write(data)
       query = 
         ["ver:\"#{haystack_project.haystack_version}\" id:#{self.haystack_point_id}",'ts,val'] + data.map{ |d| "#{d[:time]},#{d[:value]}"}
-        # puts 'his_write query updated:'
-        # pp  query.join "\n"
+        puts 'his_write query updated:'
+        pp  query.join "\n"
       res = connection.post('hisWrite') do |req|
         req.headers['Content-Type'] = 'text/plain'
         req.body = query.join("\n")
       end
+      puts 'results ='
+      pp res.body
       JSON.parse(res.body)['meta']['ok'].present?
     end
 
@@ -58,6 +60,19 @@ module ProjectHaystack
   
       res = his_read r.to_s
       reformat_timeseries(res['rows'])
+    end
+
+    def write_data(data)
+      # format data for his_write
+      puts 'in write data'
+      data = data.map do |d| 
+        { 
+          time: ProjectHaystack::Timestamp.convert_to_string(d[:time], self.haystack_time_zone), 
+          value: d[:value]
+        }
+      end
+      puts "data = #{data}"
+      his_write data
     end
 
     # map from 

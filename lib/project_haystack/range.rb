@@ -23,9 +23,9 @@ module ProjectHaystack
     
     def format(dt)
       if dt.kind_of? DateTime
-        # TODO improve this - currently the time zone of app must match time zone of point.
+        # TODO improve this - timezone of dt should match timezone of point.
         # need to integrate a mapping between ruby time zones and haystack time zones.
-        "#{dt.in_time_zone.to_s} #{@haystack_time_zone}" 
+        "#{dt} #{@haystack_time_zone}" 
       elsif dt.kind_of? Date
         dt.to_s
       else
