@@ -1,7 +1,7 @@
 require 'spec_helper'
 describe ProjectHaystack::Project do
   before do
-    @demo = ProjectHaystack::Config.projects['demo']
+    @demo = ProjectHaystack::Config.projects['test']
   end
   describe '#connection' do
     context 'defined project name' do

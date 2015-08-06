@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'models/point_demo'
 describe ProjectHaystack::Point do
   before do
-    @point = PointDemo.new('demo','@ShortPump.ElecMeter-Main.kWh','New_York')
+    @point = PointDemo.new('test','@1d5675a8-867de4b8','Denver')
   end
   describe '#haystack_project' do
     context 'real project name' do
