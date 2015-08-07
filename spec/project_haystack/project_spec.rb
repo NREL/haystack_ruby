@@ -30,4 +30,25 @@ describe ProjectHaystack::Project do
       end
     end
   end
+  describe '#add_rec' do
+    context 'point' do
+      it 'returns id' do
+        params = [{name: 'sp',type: 'Marker',value: 'M'},{name: 'dis',type: 'String',value: 'Test'},{name: 'point', type: 'Marker', value: 'M'},{name: 'equipRef',type: 'Ref',value: '@1d56759c-8f9214b6'},{name: 'siteRef', type: 'Ref', value: '@1d56758c-c15f5708'}]
+        res = @demo.add_rec(params )
+        expect(res).to be_a_kind_of String
+      end
+    end
+  end
+  describe '#update_rec' do
+    context 'point' do
+      # TODO fix timestamp on mod in method
+      it 'returns no error' do
+        params = [{name: 'dis',type: 'String',value: "Mod by Test #{DateTime.now}"}]
+        res = @demo.update_rec('@1d5675a8-867de4b8',params)
+        require 'pp'
+        pp res
+        expect(res['meta']['err']).to be_nil
+      end
+    end
+  end
 end
