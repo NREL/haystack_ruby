@@ -9,7 +9,7 @@ module ProjectHaystack
       if ts.kind_of? DateTime
         t = ts.to_s
       elsif ts.kind_of? Integer
-        t = DateTime.at(ts).to_s
+        t = Time.at(ts).to_datetime.to_s
       elsif ts.kind_of? Date
         t = ts.to_datetime.to_s
       else 
