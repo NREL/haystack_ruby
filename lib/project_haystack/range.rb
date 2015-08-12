@@ -11,25 +11,13 @@ module ProjectHaystack
       @finish = nil
       if range.kind_of? Array 
         raise ArgumentError, 'Too many values for range' if range.count > 2
-        @start = format(range.first) 
+        @start = Timestamp.convert_to_string(range.first, time_zone) 
         if range.count > 1
-          @finish = format(range.last)
+          @finish = Timestamp.convert_to_string(range.last, time_zone)
           raise ArgumentError, 'Start must be before End' if DateTime.parse(@start) >= DateTime.parse(@finish)
         end
       else
-        @start = format(range)
-      end
-    end
-    
-    def format(dt)
-      if dt.kind_of? DateTime
-        # TODO improve this - timezone of dt should match timezone of point.
-        # need to integrate a mapping between ruby time zones and haystack time zones.
-        "#{dt} #{@haystack_time_zone}" 
-      elsif dt.kind_of? Date
-        dt.to_s
-      else
-        raise ArgumentError, 'Start and end must be Date or DateTime'
+        @start = Timestamp.convert_to_string(range, time_zone)
       end
     end
 

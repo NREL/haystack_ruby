@@ -96,6 +96,21 @@ describe ProjectHaystack::Point do
           expect(data.count).to be > 0
         end
       end
+      context 'Integers' do
+        it 'returns data when two ascending Integer values' do
+          data = @point.data(Date.parse('2015-06-15').to_time.to_i, Date.parse('2015-06-16').to_time.to_i)
+          expect(data.count).to be > 0
+        end
+        it 'throws error start is after finish' do
+          expect {
+            data = @point.data(Date.parse('2015-06-16').to_time.to_i, Date.parse('2015-06-15').to_time.to_i)
+          }.to raise_error ArgumentError
+        end
+        it 'returns data when no finish' do
+          data = @point.data(Date.parse('2015-06-15').to_time.to_i)
+          expect(data.count).to be > 0
+        end
+      end
       context 'DateTimes' do 
         it 'returns data when two ascending DateTime values' do
           data = @point.data(Date.parse('2015-06-15').to_datetime, Date.parse('2015-06-16').to_datetime)
