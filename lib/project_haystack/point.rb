@@ -28,7 +28,7 @@ module ProjectHaystack
       JSON.parse! res.body
     end
 
-    def meta
+    def meta_data
       # TODO set / refresh haystack_time_zone from the tx in returned data
       # read request on project to load current info, including tags and timezone
       res = haystack_project.read({:id => haystack_point_id})['rows'].first
@@ -38,14 +38,12 @@ module ProjectHaystack
     def his_write(data)
       query = 
         ["ver:\"#{haystack_project.haystack_version}\" id:#{self.haystack_point_id}",'ts,val'] + data.map{ |d| "#{d[:time]},#{d[:value]}"}
-        puts 'his_write query updated:'
-        pp  query.join "\n"
+
       res = connection.post('hisWrite') do |req|
         req.headers['Content-Type'] = 'text/plain'
         req.body = query.join("\n")
       end
-      puts 'results ='
-      pp res.body
+
       JSON.parse(res.body)['meta']['ok'].present?
     end
 
@@ -59,27 +57,25 @@ module ProjectHaystack
       r = ProjectHaystack::Range.new(range, self.haystack_time_zone)
   
       res = his_read r.to_s
-      reformat_timeseries(res['rows'])
+      reformat_timeseries(res['rows'], as_datetime)
     end
 
     def write_data(data)
       # format data for his_write
-      puts 'in write data'
       data = data.map do |d| 
         { 
           time: ProjectHaystack::Timestamp.convert_to_string(d[:time], self.haystack_time_zone), 
           value: d[:value]
         }
       end
-      puts "data = #{data}"
       his_write data
     end
 
     # map from 
-    def reformat_timeseries data
+    def reformat_timeseries data, as_datetime
       data.map do |d|
-        # may not keep unit
-        {:time => DateTime.parse(d['ts']).to_time.to_i, :value => d['val'], :unit => d['val.unit']}
+        time = (as_datetime) ? DateTime.parse(d['ts']) : DateTime.parse(d['ts']).to_i
+        {:time => time, :value => d['val']}
       end
     end
   end

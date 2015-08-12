@@ -50,10 +50,10 @@ describe ProjectHaystack::Point do
     end
   end
   
-  describe '#meta' do
+  describe '#metadata' do
     context 'valid id' do
       it 'returns metadata for the point' do
-        expect(@point.meta).to be_a_kind_of Hash 
+        expect(@point.meta_data).to be_a_kind_of Hash 
       end
     end
   end
@@ -70,6 +70,14 @@ describe ProjectHaystack::Point do
       end
       it 'returns time as epoch' do
         expect(@d[:time]).to be_a_kind_of Integer
+      end
+    end
+    context 'as_datetime true' do
+      before do
+        @d = @point.data(Date.parse('2015-06-15'), nil, true).first
+      end
+      it 'returns time in DateTime format' do
+        expect(@d[:time]).to be_kind_of DateTime
       end
     end
     context 'various range formats' do
