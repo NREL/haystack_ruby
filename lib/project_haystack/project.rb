@@ -10,10 +10,12 @@ module ProjectHaystack
       @credentials = config['credentials']
       @base_url = config['base_url']
       @haystack_version = config['haystack_version']
+      @secure = config['secure']
     end
     # for now, setting up to have a single connection per project 
     def connection
-      url = "https://#{@base_url}"
+      url = (@secure) ? 'https://' : 'http://'
+      url = "#{url}#{@base_url}"
       @connection ||= Faraday.new(:url => url) do |faraday|
         faraday.request  :url_encoded             # form-encode POST params
         faraday.response :logger                  # log requests to STDOUT
@@ -32,6 +34,37 @@ module ProjectHaystack
         req.body = body.join("\n")
       end
       JSON.parse! res.body
+    end
+
+    # return meta data for all equip with related points
+    def equip_point_meta
+      begin
+        equips = read({filter: '"equip"'})['rows']
+        equips.map! do |eq|
+          eq.delete('disMacro')
+          eq['description'] = eq['id'].match(/[(NWTC)|(\$siteRef)] (.*)/)[1]
+          eq['id'] = eq['id'].match(/:([a-z0-9\-]*)/)[1]
+          eq['points'] = []
+          read({filter: "\"point and equipRef==#{eq['id']}\""})['rows'].each do |p|
+            p.delete('analytics')
+            p.delete('disMacro')
+            p.delete('csvUnit')
+            p.delete('csvColumn')
+            p.delete('equipRef')
+            p.delete('point')
+            p.delete('siteRef')
+
+            p['id'] = p['id'].match(/:([a-z0-9\-]*)/)[1]
+            p['name'] = p['navName']
+            p.delete('navName')
+            eq['points'] << p
+          end
+          eq
+        end
+      rescue Exception => e
+        puts "error: #{e}"
+        nil
+      end
     end
 
     def ops
