@@ -2,9 +2,7 @@ require 'date'
 # require 'active_support'
 module ProjectHaystack
   module Point
-    # extend ::ActiveSupport::Concern
-    # attr_accessible :haystack_project_name, :haystack_point_id
-
+    
     # is this Point valid for purposees of Project Haystack Integration?  
     def haystack_valid?
       return self.haystack_project_name.present? && self.haystack_point_id.present? && self.haystack_time_zone.present?
@@ -19,7 +17,7 @@ module ProjectHaystack
     end
 
     def his_read(range)
-      query = ["ver:\"#{haystack_project.haystack_version}\"",'id,range',"#{self.haystack_point_id},\"#{range}\""]
+      query = ["ver:\"#{haystack_project.haystack_version}\"",'id,range',"@#{self.haystack_point_id},\"#{range}\""]
       pp query.join "\n"
       res = connection.post('hisRead') do |req|
         req.headers['Content-Type'] = 'text/plain'
@@ -37,7 +35,7 @@ module ProjectHaystack
     # data is ascending array of hashes with format: {time: epochtime, value: myvalue}
     def his_write(data)
       query = 
-        ["ver:\"#{haystack_project.haystack_version}\" id:#{self.haystack_point_id}",'ts,val'] + data.map{ |d| "#{d[:time]},#{d[:value]}"}
+        ["ver:\"#{haystack_project.haystack_version}\" id:@#{self.haystack_point_id}",'ts,val'] + data.map{ |d| "#{d[:time]},#{d[:value]}"}
 
       res = connection.post('hisWrite') do |req|
         req.headers['Content-Type'] = 'text/plain'
