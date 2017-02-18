@@ -16,6 +16,13 @@ module ProjectHaystack
           @handshake_token = Base64.strict_encode64(@user.username)
         end
 
+        def authorize
+          res = send_first_message
+          parse_first_response(res)
+          res = send_second_message
+          parse_second_response(res)
+        end
+
         # TODO move connection out
 
         def connection 
@@ -66,23 +73,48 @@ module ProjectHaystack
           @server_nonce = server_vars['r']
           @server_salt = server_vars['s'] #Base64.decode64(server_vars['s'])
           @server_iterations = server_vars['i'].to_i
-          # puts "server salt = #{@server_salt}"
         end
 
         def send_second_message
           res = connection.get('about') do |req|
             req.headers['Authorization'] = "SCRAM handshakeToken=#{@handshake_token},data=#{Base64.strict_encode64(client_final).tr('=','')}"
           end
-          puts "res = #{res.inspect}"
           res
           
         end
         def parse_second_response(response)
+          begin
+            response_str = response.env.response_headers['authentication-info']
+            response_vars = {}
+            response_str.split(', ').each do |pair|
+              key,value = pair.split('=')
+              response_vars[key] = value
+            end
+            # decode data attribute to check server signature is as expected
+            key,val = Base64.decode64(response_vars['data']).split('=')
+            response_vars[key] = val
+            server_sig = response_vars['v']
+            puts "server sig = #{server_sig}, expected server sig = #{expected_server_signature}"
+            unless server_sig == expected_server_signature
+              throw "invalid signature from server"
+            end
+            @auth_token = response_vars['authToken']
+          # rescue Exception => e
+          #   raise
+          end
+          
         end
 
+        def test_auth_token
+          res = connection.get('about') do |req|
+            req.headers['Authorization'] = "BEARER authToken=#{@auth_token}"
+          end
+        end
 
         private
 
+# utility methods, closely matched with SCRAM notation and algorithm overview here: 
+# https://tools.ietf.org/html/rfc5802#section-3
 
         def auth_message
           @auth_message ||= "#{first_message},#{@server_first_msg},#{without_proof}"
@@ -105,6 +137,13 @@ module ProjectHaystack
           @client_signature ||= hmac(key, message)
         end
 
+        def expected_server_key
+          @server_key ||= hmac(salted_password, 'Server Key')
+        end
+
+        def expected_server_signature
+          @server_signature ||= Base64.strict_encode64(hmac(expected_server_key, auth_message)).tr('=','')
+        end
 
         def first_message
           "n=#{@user.username},r=#{@nonce}"
@@ -131,14 +170,6 @@ module ProjectHaystack
 
         def salted_password
           @salted_password ||= hi(@user.password)
-        end
-
-        def server_key
-          @server_key ||= hmac(salted_password, 'Server Key')
-        end
-
-        def server_signature
-          @server_signature ||= Base64.strict_encode64(hmac(server_key, auth_message))
         end
 
         def stored_key(key)
