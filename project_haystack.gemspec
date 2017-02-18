@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name = 'project_haystack'
-  s.version = '0.0.0'
-  s.date = '2015-05-07'
+  s.version = '0.0.1'
+  s.date = '2017-02-17'
   s.summary = 'Project Haystack Adapter'
   s.description = 'Ruby adapter for Project Haystack REST API'
   s.authors = ['Anya Petersen']
