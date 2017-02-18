@@ -11,6 +11,7 @@ Gem::Specification.new do |s|
   s.license = 'GNU AFFERO GENERAL PUBLIC LICENSE'
   s.add_dependency 'faraday','~> 0.9.1'
   s.add_dependency 'activesupport'
+  s.add_dependency 'openssl'
   s.add_development_dependency "rspec"
   s.test_files = Dir.glob('spec/**/*')
 end

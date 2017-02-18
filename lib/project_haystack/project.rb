@@ -38,8 +38,9 @@ module ProjectHaystack
 
     # return meta data for all equip with related points
     def equip_point_meta
-      begin
+      # begin
         equips = read({filter: '"equip"'})['rows']
+        puts equips
         equips.map! do |eq|
           eq.delete('disMacro')
           eq['description'] = eq['id'].match(/[(NWTC)|(\$siteRef)] (.*)/)[1]
@@ -61,10 +62,10 @@ module ProjectHaystack
           end
           eq
         end
-      rescue Exception => e
+      # rescue Exception => e
         puts "error: #{e}"
         nil
-      end
+      # end
     end
 
     def ops
