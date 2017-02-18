@@ -7,10 +7,19 @@ module ProjectHaystack
     attr_accessor :name, :haystack_version, :base_url #required
     def initialize(name, config)
       @name = name
-      @credentials = config['credentials']
+       #for now at least, we fake the user object 
+      @user = OpenStruct.new
+      @user.username = config['username']
+      @user.password = config['password']
       @base_url = config['base_url']
       @haystack_version = config['haystack_version']
       @secure = config['secure']
+      
+      # TODO load auth token from a user database and only initiate scram conversation if necessary
+      puts "user = #{config}" 
+      auth_conv = ProjectHaystack::Auth::Scram::Conversation.new(@user)
+      auth_conv.authorize
+      @auth_token = auth_conv.auth_token
     end
     # for now, setting up to have a single connection per project 
     def connection
@@ -20,7 +29,7 @@ module ProjectHaystack
         faraday.request  :url_encoded             # form-encode POST params
         faraday.response :logger                  # log requests to STDOUT
         faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
-        faraday.headers['Authorization'] = "Basic #{@credentials}"
+        faraday.headers['Authorization'] = "BEARER authToken=#{@auth_token}"
         faraday.headers['Accept'] = 'application/json' #TODO enable more formats
       end
     end
