@@ -9,6 +9,7 @@ module ProjectHaystack
         p = Project.new(name, config)
         @projects[name] = p if p.valid?
       end
+      puts "projects count = #{projects.count}"
     end
 
     # called in railtie

@@ -6,7 +6,6 @@ module ProjectHaystack
     
     attr_accessor :name, :haystack_version, :base_url #required
     def initialize(name, config)
-      puts "initializing haystack #{name}"
       @name = name
       @base_url = config['base_url']
       @haystack_version = config['haystack_version']
@@ -23,12 +22,9 @@ module ProjectHaystack
 
         # TODO load auth token from a user database and only initiate scram conversation if necessary
         auth_conv = ProjectHaystack::Auth::Scram::Conversation.new(user)
-        puts "starting auth conv"
         auth_conv.authorize
-        puts "after authorize"
         @auth_token = auth_conv.auth_token
       end
-      puts "after initializing #{self.inspect}"
     end
     # for now, setting up to have a single connection per project 
     def connection
