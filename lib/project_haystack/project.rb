@@ -6,20 +6,29 @@ module ProjectHaystack
     
     attr_accessor :name, :haystack_version, :base_url #required
     def initialize(name, config)
+      puts "initializing haystack #{name}"
       @name = name
-       #for now at least, we fake the user object 
-      @user = OpenStruct.new
-      @user.username = config['username']
-      @user.password = config['password']
       @base_url = config['base_url']
       @haystack_version = config['haystack_version']
       @secure = config['secure']
-      
-      # TODO load auth token from a user database and only initiate scram conversation if necessary
-      puts "user = #{config}" 
-      auth_conv = ProjectHaystack::Auth::Scram::Conversation.new(@user)
-      auth_conv.authorize
-      @auth_token = auth_conv.auth_token
+      # expect to use basic auth
+      if config['credentials'].present?
+        @credentials = config['credentials']
+       #for now at least, we fake the user object
+      #expect to use scram
+      else
+        user = OpenStruct.new
+        user.username = config['username']
+        user.password = config['password']
+
+        # TODO load auth token from a user database and only initiate scram conversation if necessary
+        auth_conv = ProjectHaystack::Auth::Scram::Conversation.new(user)
+        puts "starting auth conv"
+        auth_conv.authorize
+        puts "after authorize"
+        @auth_token = auth_conv.auth_token
+      end
+      puts "after initializing #{self.inspect}"
     end
     # for now, setting up to have a single connection per project 
     def connection
@@ -29,7 +38,7 @@ module ProjectHaystack
         faraday.request  :url_encoded             # form-encode POST params
         faraday.response :logger                  # log requests to STDOUT
         faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
-        faraday.headers['Authorization'] = "BEARER authToken=#{@auth_token}"
+        faraday.headers['Authorization'] = @auth_token.present? ? "BEARER authToken=#{@auth_token}" : "Basic #@credentials"
         faraday.headers['Accept'] = 'application/json' #TODO enable more formats
       end
     end
