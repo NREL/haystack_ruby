@@ -5,12 +5,11 @@ module ProjectHaystack
   module Auth
     module Scram
       class Conversation
-
-        BASE_URL = 'https://skyspark-logger.nrel.gov/api/bdash/'
         attr_reader :auth_token, :nonce, :server_nonce, :server_salt
 
-        def initialize(user)
+        def initialize(user, url)
           @user = user
+          @url = url
           @nonce = SecureRandom.base64.tr('=','') #TODO check if problem to potentially strip =
           @digest = OpenSSL::Digest::SHA256.new 
           @handshake_token = Base64.strict_encode64(@user.username)
@@ -23,11 +22,8 @@ module ProjectHaystack
           parse_second_response(res)
         end
 
-        # TODO move connection out
-
         def connection 
-          @connection ||= Faraday.new(:url => BASE_URL) do |faraday|
-            # faraday.request  :url_encoded             # form-encode POST params
+          @connection ||= Faraday.new(:url => @url) do |faraday|
             faraday.response :logger                  # log requests to STDOUT
             faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
             faraday.headers['Accept'] = 'application/json' #TODO enable more formats
