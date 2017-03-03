@@ -7,9 +7,9 @@ module ProjectHaystack
     attr_accessor :name, :haystack_version, :base_url #required
     def initialize(name, config)
       @name = name
-      @base_url = config['base_url']
+      @url = (config['secure']) ? 'https://' : 'http://'
+      @url = "#{@url}#{config['base_url']}"
       @haystack_version = config['haystack_version']
-      @secure = config['secure']
       # expect to use basic auth
       if config['credentials'].present?
         @credentials = config['credentials']
@@ -19,18 +19,29 @@ module ProjectHaystack
         user = OpenStruct.new
         user.username = config['username']
         user.password = config['password']
-
-        # TODO load auth token from a user database and only initiate scram conversation if necessary
-        auth_conv = ProjectHaystack::Auth::Scram::Conversation.new(user)
-        auth_conv.authorize
-        @auth_token = auth_conv.auth_token
+        # @creds_path = config['credentials_path']
+        # creds = YAML.load File.new(@creds_path).read
+        # user.username = creds['username']
+        # user.password = creds['password']
+        authorize user
       end
     end
+
+    def authorize user
+      Rails.logger.debug "Attempting Scram authentication"
+      auth_conv = ProjectHaystack::Auth::Scram::Conversation.new(user, @url)
+      auth_conv.authorize
+      @auth_token = auth_conv.auth_token
+      raise "scram authorization failed" unless @auth_token.present?
+    end
+
+
     # for now, setting up to have a single connection per project 
     def connection
-      url = (@secure) ? 'https://' : 'http://'
-      url = "#{url}#{@base_url}"
-      @connection ||= Faraday.new(:url => url) do |faraday|
+      # if @credentials.nil? && @auth_token.nil?
+      #   authorize #will either set auth token or raise error
+      # end
+      @connection ||= Faraday.new(:url => @url) do |faraday|
         faraday.request  :url_encoded             # form-encode POST params
         faraday.response :logger                  # log requests to STDOUT
         faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
@@ -87,7 +98,7 @@ module ProjectHaystack
     end
 
     def valid?
-      !(@name.nil? || @haystack_version.nil? || @base_url.nil?)
+      !(@name.nil? || @haystack_version.nil? || @url.nil?)
     end
 
     # http://www.skyfoundry.com/doc/docSkySpark/Ops#commit
@@ -135,5 +146,13 @@ module ProjectHaystack
       grid << "#{id},#{DateTime.now}"
       commit grid      
     end
+    private
+
+    # def persist_creds
+    #   creds = {username: @username, password: @password, auth_token: @auth_token}
+    #   File.open(@creds_path,'w') do |h|
+    #     h.write creds.to_yaml
+    #   end
+    # end
   end
 end
