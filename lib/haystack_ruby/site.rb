@@ -1,4 +1,4 @@
-module ProjectHaystack
+module HaystackRuby
   module Site
   end
 end

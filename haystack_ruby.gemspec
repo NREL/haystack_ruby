@@ -1,8 +1,8 @@
 Gem::Specification.new do |s|
-  s.name = 'project_haystack'
-  s.version = '0.0.0'
-  s.date = '2015-05-07'
-  s.summary = 'Project Haystack Adapter'
+  s.name = 'haystack_ruby'
+  s.version = '0.0.1'
+  s.date = '2017-03-14'
+  s.summary = 'Project Haystack Ruby Adapter'
   s.description = 'Ruby adapter for Project Haystack REST API'
   s.authors = ['Anya Petersen']
   s.email = 'apeterse@nrel.gov'
@@ -11,6 +11,7 @@ Gem::Specification.new do |s|
   s.license = 'GNU AFFERO GENERAL PUBLIC LICENSE'
   s.add_dependency 'faraday','~> 0.9.1'
   s.add_dependency 'activesupport'
+  s.add_dependency 'openssl'
   s.add_development_dependency "rspec"
   s.test_files = Dir.glob('spec/**/*')
 end

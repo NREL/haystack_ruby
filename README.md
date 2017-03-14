@@ -8,7 +8,7 @@ Project Haystack Adapter
 
 
 ```
-ProjectHaystack::Config.projects['project_name']
+HaystackRuby::Config.projects['project_name']
 ```
 
 
@@ -30,7 +30,7 @@ project.read({:id => "@my_rec_id"})
 - Include point functionality: 
 
 ```
-include ProjectHaystack::Point
+include HaystackRuby::Point
 ```
 
 - Call `data` method to load data for point.

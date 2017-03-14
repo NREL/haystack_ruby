@@ -4,7 +4,7 @@
 # ----------------
 
 
-module ProjectHaystack
+module HaystackRuby
   class Range
     def initialize(range,time_zone)
       @haystack_time_zone = time_zone

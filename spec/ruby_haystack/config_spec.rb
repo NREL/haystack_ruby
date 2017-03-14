@@ -1,13 +1,13 @@
 require 'spec_helper'
-describe ProjectHaystack::Config do
+describe HaystackRuby::Config do
   describe '.projects' do
     context 'good config file' do
       before do
-        @projects = ProjectHaystack::Config.projects
-        @demo = @projects['test']
+        @projects = HaystackRuby::Config.projects
+        @demo = @projects[V3PROJECT]
       end
       it 'returns a project' do
-        expect(@demo).to be_a_kind_of ProjectHaystack::Project
+        expect(@demo).to be_a_kind_of HaystackRuby::Project
       end
     end
     context 'bad project in config file' do

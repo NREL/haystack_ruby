@@ -1,26 +1,50 @@
-module ProjectHaystack
+module HaystackRuby
   require 'json'
   require 'pp'
   # may consider making this a mixin instead
   class Project
     
-    attr_accessor :name, :haystack_version, :base_url #required
+    attr_accessor :name, :haystack_version, :url #required
     def initialize(name, config)
       @name = name
-      @credentials = config['credentials']
-      @base_url = config['base_url']
+      @url = (config['secure']) ? 'https://' : 'http://'
+      @url = "#{@url}#{config['base_url']}"
       @haystack_version = config['haystack_version']
-      @secure = config['secure']
+      # expect to use basic auth
+      if config['credentials'].present?
+        @credentials = config['credentials']
+       #for now at least, we fake the user object
+      #expect to use scram
+      else
+        user = OpenStruct.new
+        user.username = config['username']
+        user.password = config['password']
+        # @creds_path = config['credentials_path']
+        # creds = YAML.load File.new(@creds_path).read
+        # user.username = creds['username']
+        # user.password = creds['password']
+        authorize user
+      end
     end
+
+    def authorize user
+      auth_conv = HaystackRuby::Auth::Scram::Conversation.new(user, @url)
+      auth_conv.authorize
+      @auth_token = auth_conv.auth_token
+      raise "scram authorization failed" unless @auth_token.present?
+    end
+
+
     # for now, setting up to have a single connection per project 
     def connection
-      url = (@secure) ? 'https://' : 'http://'
-      url = "#{url}#{@base_url}"
-      @connection ||= Faraday.new(:url => url) do |faraday|
+      # if @credentials.nil? && @auth_token.nil?
+      #   authorize #will either set auth token or raise error
+      # end
+      @connection ||= Faraday.new(:url => @url) do |faraday|
         faraday.request  :url_encoded             # form-encode POST params
         faraday.response :logger                  # log requests to STDOUT
         faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
-        faraday.headers['Authorization'] = "Basic #{@credentials}"
+        faraday.headers['Authorization'] = @auth_token.present? ? "BEARER authToken=#{@auth_token}" : "Basic #@credentials"
         faraday.headers['Accept'] = 'application/json' #TODO enable more formats
       end
     end
@@ -38,8 +62,9 @@ module ProjectHaystack
 
     # return meta data for all equip with related points
     def equip_point_meta
-      begin
+      # begin
         equips = read({filter: '"equip"'})['rows']
+        puts equips
         equips.map! do |eq|
           eq.delete('disMacro')
           eq['description'] = eq['id'].match(/[(NWTC)|(\$siteRef)] (.*)/)[1]
@@ -61,10 +86,10 @@ module ProjectHaystack
           end
           eq
         end
-      rescue Exception => e
+      # rescue Exception => e
         puts "error: #{e}"
         nil
-      end
+      # end
     end
 
     def ops
@@ -72,7 +97,7 @@ module ProjectHaystack
     end
 
     def valid?
-      !(@name.nil? || @haystack_version.nil? || @base_url.nil?)
+      !(@name.nil? || @haystack_version.nil? || @url.nil?)
     end
 
     # http://www.skyfoundry.com/doc/docSkySpark/Ops#commit
@@ -103,16 +128,18 @@ module ProjectHaystack
 
 # TODO fix these.  weird sensitivities around mod timestamp (format and time)
     # params is array of hashes: {name: xx, type: xx, value: xx}
-    def update_rec id,params
-      grid = ["ver:\"#{@haystack_version}\" commit:\"update\""]
-      grid << 'id,mod,' + params.map{|p| p[:name]}.join(',')
-      values = params.map do |p|
-        p[:value] = "\"#{p[:value]}\"" if p[:type] == 'String'
-        p[:value]
-      end
-      grid << "#{id},#{DateTime.now},#{values.join(',')}"
-      commit grid      
-    end
+    # def update_rec id,params
+      # grid = ["ver:\"#{@haystack_version}\" commit:\"update\""]
+      # grid << 'id,mod,' + params.map{|p| p[:name]}.join(',')
+      # values = params.map do |p|
+      #   p[:value] = "\"#{p[:value]}\"" if p[:type] == 'String'
+      #   p[:value]
+      # end
+      # grid << "#{id},2017-01-09T17:21:31.197Z UTC,#{values.join(',')}"
+      # puts "dumping grid #{grid}"
+      #
+      # commit grid
+    # end
 
     def remove_rec id
       grid = ["ver:\"#{@haystack_version}\" commit:\"remove\""]
@@ -120,5 +147,13 @@ module ProjectHaystack
       grid << "#{id},#{DateTime.now}"
       commit grid      
     end
+    private
+
+    # def persist_creds
+    #   creds = {username: @username, password: @password, auth_token: @auth_token}
+    #   File.open(@creds_path,'w') do |h|
+    #     h.write creds.to_yaml
+    #   end
+    # end
   end
 end

@@ -1,4 +1,4 @@
-module ProjectHaystack
+module HaystackRuby
   class Timestamp
     # convert ts to a Project Haystack compliant string.
     # ts is a timestamp, tz is a Haystack timezone string
