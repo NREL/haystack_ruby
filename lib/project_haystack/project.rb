@@ -4,7 +4,7 @@ module ProjectHaystack
   # may consider making this a mixin instead
   class Project
     
-    attr_accessor :name, :haystack_version, :base_url #required
+    attr_accessor :name, :haystack_version, :url #required
     def initialize(name, config)
       @name = name
       @url = (config['secure']) ? 'https://' : 'http://'
