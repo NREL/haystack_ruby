@@ -1,7 +1,7 @@
 require 'spec_helper'
 describe ProjectHaystack::Project do
   before do
-    @demo = ProjectHaystack::Config.projects['test']
+    @demo = ProjectHaystack::Config.projects[PT_PROJ]
   end
   describe '#connection' do
     context 'defined project name' do
@@ -39,16 +39,17 @@ describe ProjectHaystack::Project do
       end
     end
   end
-  describe '#update_rec' do
-    context 'point' do
-      # TODO fix timestamp on mod in method
-      it 'returns no error' do
-        params = [{name: 'dis',type: 'String',value: "Mod by Test #{DateTime.now}"}]
-        res = @demo.update_rec('@1d5675a8-867de4b8',params)
-        require 'pp'
-        pp res
-        expect(res['meta']['err']).to be_nil
-      end
-    end
-  end
+  # describe '#update_rec' do
+  #   context 'point' do
+  #     # TODO fix timestamp on mod in method
+  #     it 'returns no error' do
+  #       params = [{name: 'dis',type: 'String',value: "Mod by Test #{DateTime.now}"}]
+  #       res = @demo.update_rec("@#{PT_ID}",params)
+  #       require 'pp'
+  #       pp params
+  #       pp res
+  #       expect(res['meta']['err']).to be_nil
+  #     end
+  #   end
+  # end
 end
