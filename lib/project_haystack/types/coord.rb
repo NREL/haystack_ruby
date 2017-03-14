@@ -4,12 +4,11 @@ module ProjectHaystack
       def set_fields str_value
         @haystack_type = 'Coord'
         match = /\Ac:([0-9.-]*),([0-9.-]*)\z/.match str_value
-        try
+        begin
           @value = [match[1].to_f, match[2].to_f] #value is array of [lat, lng]
-        catch Exception=>e
+        rescue Exception=>e
           raise "invalid ProjectHaystack::Types::Coord #{str_value}.  Error #{e}"
         end
-
       end
     end
   end

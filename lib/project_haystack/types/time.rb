@@ -5,9 +5,9 @@ module ProjectHaystack
       def set_fields str_value
         @haystack_type = 'Time'
         match = /\Ah:([0-9:]*)\z/.match str_value
-        try
+        begin
           @value = match[1]
-        catch Exception=>e
+        rescue Exception=>e
           raise "invalid ProjectHaystack::Types::Time #{str_value}.  Error #{e}"
         end
       end

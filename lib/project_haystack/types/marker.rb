@@ -6,6 +6,5 @@ module ProjectHaystack
         @value = true
       end
     end
-    end
   end
 end

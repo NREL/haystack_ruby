@@ -4,9 +4,9 @@ module ProjectHaystack
       def set_fields str_value
         @haystack_type = 'DateTime'
         match = /\At:(.*)\z/.match str_value
-        try
+        begin
           @value = DateTime.parse match[1]
-        catch Exception=>e
+        rescue Exception=>e
           raise "invalid ProjectHaystack::Types::DateTime #{str_value}.  Error #{e}"
         end
       end

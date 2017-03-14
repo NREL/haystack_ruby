@@ -1,3 +1,16 @@
+require 'project_haystack/types/bin'
+require 'project_haystack/types/coord'
+require 'project_haystack/types/date'
+require 'project_haystack/types/date_time'
+require 'project_haystack/types/marker'
+require 'project_haystack/types/n_a'
+require 'project_haystack/types/number'
+require 'project_haystack/types/ref'
+require 'project_haystack/types/str'
+require 'project_haystack/types/time'
+require 'project_haystack/types/uri'
+require 'project_haystack/types/x_str'
+
 module ProjectHaystack
   class Object
     # Always present
@@ -6,7 +19,7 @@ module ProjectHaystack
     attr_reader :unit, :description
     # initialize with a encoded json string
     def initialize val
-      case val.class
+      case val
         when Array
           @haystack_type = "Array" #may want to decode array components?
           @value = val
@@ -20,31 +33,31 @@ module ProjectHaystack
           # Map to Haystack type per http://project-haystack.org/doc/Json
           case val
             when /\Am:.*/
-              include Types::Marker
+              include ProjectHaystack::Types::Marker
             when /\Az:.*/
-              include Types::NA
+              include ProjectHaystack::Types::NA
             when /\An:.*/
-              include Types::Number
+              extend ProjectHaystack::Types::Number
             when /\Ar:.*/
-              include Types::Ref
+              include ProjectHaystack::Types::Ref
             when /\As:.*/
-              include Types::Str
+              include ProjectHaystack::Types::Str
             when /\Ad:.*/
-              include Types::Date
+              include ProjectHaystack::Types::Date
             when /\Ah:.*/
-              include Types::Time
+              include ProjectHaystack::Types::Time
             when /\At:.*/
-              include Types::DateTime
+              include ProjectHaystack::Types::DateTime
             when /\Au:.*/
-              include Types::Uri
+              include ProjectHaystack::Types::Uri
             when /\Ab:.*/
-              include Types::Bin
+              include ProjectHaystack::Types::Bin
             when /\Ac:.*/
-              include Types::Coord
+              include ProjectHaystack::Types::Coord
             when /\Ax:.*/
-              include Types::XStr
+              include ProjectHaystack::Types::XStr
             else
-              raise "unrecognized type for val #{val}"
+              raise "unrecognized type for string val #{val}"
           end
         else
           raise "unrecognized type for val #{val}"
