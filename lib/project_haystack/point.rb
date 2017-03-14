@@ -29,7 +29,7 @@ module ProjectHaystack
     def meta_data
       # TODO set / refresh haystack_time_zone from the tx in returned data
       # read request on project to load current info, including tags and timezone
-      res = haystack_project.read({:id => haystack_point_id})['rows'].first
+      res = haystack_project.read({:id => "@#{self.haystack_point_id}"})['rows'][0]
     end
 
     # data is ascending array of hashes with format: {time: epochtime, value: myvalue}
@@ -73,8 +73,6 @@ module ProjectHaystack
     def reformat_timeseries data, as_datetime
       data.map do |d|
         time = (as_datetime) ? DateTime.parse(d['ts']) : DateTime.parse(d['ts']).to_i
-        # strip out formatting from haystack json encoding 
-        # TODO this should be much more robust
         val = ProjectHaystack::Object.new(d['val'])
         {:time => time, :value => val.value}
       end

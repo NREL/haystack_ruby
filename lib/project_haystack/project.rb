@@ -4,7 +4,7 @@ module ProjectHaystack
   # may consider making this a mixin instead
   class Project
     
-    attr_accessor :name, :haystack_version, :base_url #required
+    attr_accessor :name, :haystack_version, :url #required
     def initialize(name, config)
       @name = name
       @url = (config['secure']) ? 'https://' : 'http://'
@@ -128,16 +128,18 @@ module ProjectHaystack
 
 # TODO fix these.  weird sensitivities around mod timestamp (format and time)
     # params is array of hashes: {name: xx, type: xx, value: xx}
-    def update_rec id,params
-      grid = ["ver:\"#{@haystack_version}\" commit:\"update\""]
-      grid << 'id,mod,' + params.map{|p| p[:name]}.join(',')
-      values = params.map do |p|
-        p[:value] = "\"#{p[:value]}\"" if p[:type] == 'String'
-        p[:value]
-      end
-      grid << "#{id},#{DateTime.now},#{values.join(',')}"
-      commit grid      
-    end
+    # def update_rec id,params
+      # grid = ["ver:\"#{@haystack_version}\" commit:\"update\""]
+      # grid << 'id,mod,' + params.map{|p| p[:name]}.join(',')
+      # values = params.map do |p|
+      #   p[:value] = "\"#{p[:value]}\"" if p[:type] == 'String'
+      #   p[:value]
+      # end
+      # grid << "#{id},2017-01-09T17:21:31.197Z UTC,#{values.join(',')}"
+      # puts "dumping grid #{grid}"
+      #
+      # commit grid
+    # end
 
     def remove_rec id
       grid = ["ver:\"#{@haystack_version}\" commit:\"remove\""]
