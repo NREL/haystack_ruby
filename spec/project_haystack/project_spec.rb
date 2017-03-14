@@ -39,17 +39,4 @@ describe ProjectHaystack::Project do
       end
     end
   end
-  # describe '#update_rec' do
-  #   context 'point' do
-  #     # TODO fix timestamp on mod in method
-  #     it 'returns no error' do
-  #       params = [{name: 'dis',type: 'String',value: "Mod by Test #{DateTime.now}"}]
-  #       res = @demo.update_rec("@#{PT_ID}",params)
-  #       require 'pp'
-  #       pp params
-  #       pp res
-  #       expect(res['meta']['err']).to be_nil
-  #     end
-  #   end
-  # end
 end
