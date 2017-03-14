@@ -28,7 +28,6 @@ module ProjectHaystack
     end
 
     def authorize user
-      Rails.logger.debug "Attempting Scram authentication"
       auth_conv = ProjectHaystack::Auth::Scram::Conversation.new(user, @url)
       auth_conv.authorize
       @auth_token = auth_conv.auth_token

@@ -75,9 +75,8 @@ module ProjectHaystack
         time = (as_datetime) ? DateTime.parse(d['ts']) : DateTime.parse(d['ts']).to_i
         # strip out formatting from haystack json encoding 
         # TODO this should be much more robust
-        tmp = d['val'].match(/:([\-\.0-9]*) /)
-        val = tmp.nil? ? val : tmp[1]
-        {:time => time, :value => val.to_f}
+        val = ProjectHaystack::Object.new(d['val'])
+        {:time => time, :value => val.value}
       end
     end
   end
