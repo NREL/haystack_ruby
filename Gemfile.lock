@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    project_haystack (0.0.1)
+    haystack_ruby (0.0.1)
       activesupport
       faraday (~> 0.9.1)
       openssl
@@ -43,7 +43,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  project_haystack!
+  haystack_ruby!
   rspec
 
 BUNDLED WITH
