@@ -23,7 +23,10 @@ module ProjectHaystack
         when Array
           @haystack_type = "Array" #may want to decode array components?
           @value = val
-        when Boolean #may come through as string
+        when TrueClass #may come through as string
+          @haystack_type = "Boolean"
+          @value = val
+        when FalseClass #may come through as string
           @haystack_type = "Boolean"
           @value = val
         when NilClass #may come through as string..?
