@@ -27,7 +27,6 @@ module HaystackRuby
     end
 
     def meta_data
-      # TODO set / refresh haystack_time_zone from the tx in returned data
       # read request on project to load current info, including tags and timezone
       res = haystack_project.read({:id => "@#{self.haystack_point_id}"})['rows'][0]
     end
