@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.files = Dir.glob("lib/**/*")
   s.homepage = 'https://placeholder'
   s.license = 'GNU AFFERO GENERAL PUBLIC LICENSE'
-  s.add_dependency 'faraday','~> 0.9.1'
+  s.add_dependency 'faraday'
   s.add_dependency 'activesupport'
   s.add_dependency 'openssl'
   s.add_development_dependency "rspec"
