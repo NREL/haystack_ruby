@@ -24,7 +24,7 @@ module HaystackRuby
 
         def connection 
           @connection ||= Faraday.new(:url => @url) do |faraday|
-            faraday.response :logger                  # log requests to STDOUT
+            # faraday.response :logger                  # log requests to STDOUT
             faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
             faraday.headers['Accept'] = 'application/json' #TODO enable more formats
             faraday.headers['Content-Type'] = 'text/plain'

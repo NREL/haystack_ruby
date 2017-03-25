@@ -90,7 +90,7 @@ describe HaystackRuby::Point do
         it 'throws error start is after finish' do
           expect {
             data = @point.data(Date.today, Date.today.prev_day)
-          }.to raise_error ArgumentError
+          }.to raise_error HaystackRuby::Error
         end
         it 'returns data when no finish' do
           data = @point.data(Date.today.prev_day)
@@ -105,7 +105,7 @@ describe HaystackRuby::Point do
         it 'throws error start is after finish' do
           expect {
             data = @point.data(Date.today.to_time.to_i, Date.today.prev_day.to_time.to_i)
-          }.to raise_error ArgumentError
+          }.to raise_error HaystackRuby::Error
         end
         it 'returns data when no finish' do
           data = @point.data(Date.today.prev_day.to_time.to_i)
@@ -120,7 +120,7 @@ describe HaystackRuby::Point do
         it 'throws error start is after finish' do
           expect {
             @point.data(Date.today.to_datetime, Date.today.prev_day.to_datetime)
-            }.to raise_error ArgumentError
+            }.to raise_error HaystackRuby::Error
 
         end
         it 'returns data when one value' do
@@ -133,7 +133,7 @@ describe HaystackRuby::Point do
         expect(data.count).to be > 0
       end
       it 'does not accept string values for range' do
-        expect { data = @point.data(Date.today.prev_day.to_s) }.to raise_error ArgumentError
+        expect { data = @point.data(Date.today.prev_day.to_s) }.to raise_error HaystackRuby::Error
       end
       it 'returns data when range is start DateTime' do
         data = @point.data(Date.today.prev_day.to_datetime)

@@ -7,7 +7,7 @@ module HaystackRuby
         begin
           @value = [match[1].to_f, match[2].to_f] #value is array of [lat, lng]
         rescue Exception=>e
-          raise "invalid HaystackRuby::Types::Coord #{str_value}.  Error #{e}"
+          raise HaystackRuby::Error, "invalid HaystackRuby::Types::Coord #{str_value}.  Error #{e}"
         end
       end
     end
