@@ -1,0 +1,36 @@
+#development:
+#  project1:
+#    base_url: myappdomain/api/myfirstprojectname
+#    username: username
+#    password: password
+#    haystack_version: 2.0
+#    secure: true
+#  project2:
+#      base_url: anotherdomain/api/myfirstprojectname
+#      credentials: base64encoded user:password string
+#      haystack_version: 2.0
+#      secure: false
+#test:
+#  project1:
+#    base_url: myappdomain/api/myfirstprojectname
+#    username: username
+#    password: password
+#    haystack_version: 2.0
+#    secure: true
+#  project2:
+#      base_url: anotherdomain/api/myfirstprojectname
+#      credentials: base64encoded user:password string
+#      haystack_version: 2.0
+#      secure: false
+#production:
+#  project1:
+#    base_url: myappdomain/api/myfirstprojectname
+#    username: username
+#    password: password
+#    haystack_version: 2.0
+#    secure: true
+#  project2:
+#      base_url: anotherdomain/api/myfirstprojectname
+#      credentials: base64encoded user:password string
+#      haystack_version: 2.0
+#      secure: false

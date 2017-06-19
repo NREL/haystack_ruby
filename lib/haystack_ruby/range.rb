@@ -10,11 +10,11 @@ module HaystackRuby
       @haystack_time_zone = time_zone
       @finish = nil
       if range.kind_of? Array 
-        raise ArgumentError, 'Too many values for range' if range.count > 2
+        raise HaystackRuby::Error, 'Too many values for range' if range.count > 2
         @start = Timestamp.convert_to_string(range.first, time_zone) 
         if range.count > 1
           @finish = Timestamp.convert_to_string(range.last, time_zone)
-          raise ArgumentError, 'Start must be before End' if DateTime.parse(@start) >= DateTime.parse(@finish)
+          raise HaystackRuby::Error, 'Start must be before End' if DateTime.parse(@start) >= DateTime.parse(@finish)
         end
       else
         @start = Timestamp.convert_to_string(range, time_zone)

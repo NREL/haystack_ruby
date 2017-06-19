@@ -8,9 +8,9 @@ describe HaystackRuby::Auth::Scram::Conversation do
     # end
     before :each do
       user = OpenStruct.new
-      user.username = CONF[V3PROJECT]['username']
-      user.password = CONF[V3PROJECT]['password']
-      url = HaystackRuby::Config.projects[V3PROJECT].url
+      user.username = CONF[PROJECT]['username']
+      user.password = CONF[PROJECT]['password']
+      url = HaystackRuby::Config.projects[PROJECT].url
       @conv = HaystackRuby::Auth::Scram::Conversation.new(user, url)
     end
     it 'receives auth challenge response to first message' do

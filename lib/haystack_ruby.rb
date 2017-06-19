@@ -1,6 +1,7 @@
 require 'faraday'
 require 'haystack_ruby/auth/conversation'
 require 'haystack_ruby/config'
+require 'haystack_ruby/error'
 require 'haystack_ruby/object'
 require 'haystack_ruby/point'
 require 'haystack_ruby/project'

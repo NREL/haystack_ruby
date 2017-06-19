@@ -12,7 +12,7 @@ module HaystackRuby
       elsif ts.kind_of? Date
         t = ts.to_datetime.to_s
       else 
-        raise ArgumentError, "param must be one of Date, DateTime, Integer"
+        raise HaystackRuby::Error, "param must be one of Date, DateTime, Integer"
       end
       "#{t} #{tz}"
     end

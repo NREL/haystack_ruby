@@ -4,7 +4,7 @@ describe HaystackRuby::Config do
     context 'good config file' do
       before do
         @projects = HaystackRuby::Config.projects
-        @demo = @projects[V3PROJECT]
+        @demo = @projects[PROJECT]
       end
       it 'returns a project' do
         expect(@demo).to be_a_kind_of HaystackRuby::Project

@@ -7,7 +7,7 @@ module HaystackRuby
         begin
           @value = DateTime.parse match[1]
         rescue Exception=>e
-          raise "invalid HaystackRuby::Types::DateTime #{str_value}.  Error #{e}"
+          raise HaystackRuby::Error, "invalid HaystackRuby::Types::DateTime #{str_value}.  Error #{e}"
         end
       end
     end

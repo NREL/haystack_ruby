@@ -9,7 +9,6 @@ require 'haystack_ruby/types/ref'
 require 'haystack_ruby/types/str'
 require 'haystack_ruby/types/time'
 require 'haystack_ruby/types/uri'
-require 'haystack_ruby/types/x_str'
 
 module HaystackRuby
   class Object
@@ -23,13 +22,13 @@ module HaystackRuby
         when Array
           @haystack_type = "Array" #may want to decode array components?
           @value = val
-        when TrueClass #may come through as string
+        when TrueClass
           @haystack_type = "Boolean"
           @value = val
-        when FalseClass #may come through as string
+        when FalseClass
           @haystack_type = "Boolean"
           @value = val
-        when NilClass #may come through as string..?
+        when NilClass
           @haystack_type = 'Null'
           @value = val
         when String
@@ -58,12 +57,12 @@ module HaystackRuby
             when /\Ac:.*/
               include HaystackRuby::Types::Coord
             when /\Ax:.*/
-              include HaystackRuby::Types::XStr
+              raise HaystackRuby::Error, "parsing of XStr type is not supported for string val #{val}"
             else
-              raise "unrecognized type for string val #{val}"
+              raise HaystackRuby::Error, "unrecognized type for string val #{val}"
           end
         else
-          raise "unrecognized type for val #{val}"
+          raise HaystackRuby::Error, "unrecognized type for val #{val}"
         end
       set_fields val
     end

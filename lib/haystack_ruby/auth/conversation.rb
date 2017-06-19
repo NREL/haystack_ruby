@@ -24,7 +24,7 @@ module HaystackRuby
 
         def connection 
           @connection ||= Faraday.new(:url => @url) do |faraday|
-            faraday.response :logger                  # log requests to STDOUT
+            # faraday.response :logger                  # log requests to STDOUT
             faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
             faraday.headers['Accept'] = 'application/json' #TODO enable more formats
             faraday.headers['Content-Type'] = 'text/plain'
@@ -90,7 +90,6 @@ module HaystackRuby
             key,val = Base64.decode64(response_vars['data']).split('=')
             response_vars[key] = val
             server_sig = response_vars['v']
-            puts "server sig = #{server_sig}, expected server sig = #{expected_server_signature}"
             unless server_sig == expected_server_signature
               throw "invalid signature from server"
             end
