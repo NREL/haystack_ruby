@@ -90,7 +90,6 @@ module HaystackRuby
             key,val = Base64.decode64(response_vars['data']).split('=')
             response_vars[key] = val
             server_sig = response_vars['v']
-            puts "server sig = #{server_sig}, expected server sig = #{expected_server_signature}"
             unless server_sig == expected_server_signature
               throw "invalid signature from server"
             end
