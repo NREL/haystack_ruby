@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.email = 'apeterse@nrel.gov'
   s.files = Dir.glob("lib/**/*")
   s.homepage = 'https://placeholder'
-  s.license = 'GNU AFFERO GENERAL PUBLIC LICENSE'
+  s.license = 'MIT'
   s.add_dependency 'faraday'
   s.add_dependency 'activesupport'
   s.add_dependency 'openssl'
