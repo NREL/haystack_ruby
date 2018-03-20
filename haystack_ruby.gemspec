@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'haystack_ruby'
-  s.version = '0.0.1'
+  s.version = '0.0.2'
   s.date = '2017-03-14'
   s.summary = 'Project Haystack Ruby Adapter'
   s.description = 'Ruby adapter for Project Haystack REST API'
