@@ -35,27 +35,27 @@ module HaystackRuby
           # Map to Haystack type per http://project-haystack.org/doc/Json
           case val
             when /\Am:.*/
-              include HaystackRuby::Types::Marker
+              extend HaystackRuby::Types::Marker
             when /\Az:.*/
-              include HaystackRuby::Types::NA
+              extend HaystackRuby::Types::NA
             when /\An:.*/
               extend HaystackRuby::Types::Number
             when /\Ar:.*/
-              include HaystackRuby::Types::Ref
+              extend HaystackRuby::Types::Ref
             when /\As:.*/
-              include HaystackRuby::Types::Str
+              extend HaystackRuby::Types::Str
             when /\Ad:.*/
-              include HaystackRuby::Types::Date
+              extend HaystackRuby::Types::Date
             when /\Ah:.*/
-              include HaystackRuby::Types::Time
+              extend HaystackRuby::Types::Time
             when /\At:.*/
-              include HaystackRuby::Types::DateTime
+              extend HaystackRuby::Types::DateTime
             when /\Au:.*/
-              include HaystackRuby::Types::Uri
+              extend HaystackRuby::Types::Uri
             when /\Ab:.*/
-              include HaystackRuby::Types::Bin
+              extend HaystackRuby::Types::Bin
             when /\Ac:.*/
-              include HaystackRuby::Types::Coord
+              extend HaystackRuby::Types::Coord
             when /\Ax:.*/
               raise HaystackRuby::Error, "parsing of XStr type is not supported for string val #{val}"
             else
