@@ -1,13 +1,13 @@
 Gem::Specification.new do |s|
   s.name = 'haystack_ruby'
-  s.version = '0.0.1'
+  s.version = '0.0.2'
   s.date = '2017-03-14'
   s.summary = 'Project Haystack Ruby Adapter'
   s.description = 'Ruby adapter for Project Haystack REST API'
   s.authors = ['Anya Petersen']
-  s.email = 'apeterse@nrel.gov'
+  s.email = 'anya.petersen@nrel.gov'
   s.files = Dir.glob("lib/**/*")
-  s.homepage = 'https://placeholder'
+  s.homepage = 'https://github.com/NREL/haystack_ruby'
   s.license = 'MIT'
   s.add_dependency 'faraday'
   s.add_dependency 'activesupport'
