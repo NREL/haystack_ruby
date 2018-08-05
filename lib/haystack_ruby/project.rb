@@ -60,9 +60,21 @@ module HaystackRuby
       JSON.parse! res.body
     end
 
+    # this function will post expr_str exactly as encoded
+    def api_eval(expr_str)
+      body = ["ver:\"#{@haystack_version}\""]
+      body << "expr"
+      body << '"'+expr_str+'"'
+      res = self.connection.post('eval') do |req|
+        req.headers['Content-Type'] = 'text/plain'
+        req.body = body.join("\n")
+      end
+      JSON.parse! res.body
+    end
+
     # return meta data for all equip with related points
     def equip_point_meta
-      # begin
+      begin
         equips = read({filter: '"equip"'})['rows']
         puts equips
         equips.map! do |eq|
@@ -86,10 +98,10 @@ module HaystackRuby
           end
           eq
         end
-      # rescue Exception => e
+      rescue Exception => e
         puts "error: #{e}"
         nil
-      # end
+      end
     end
 
     def ops
