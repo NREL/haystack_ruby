@@ -64,7 +64,7 @@ module HaystackRuby
     def api_eval(expr_str)
       body = ["ver:\"#{@haystack_version}\""]
       body << "expr"
-      body << expr_str
+      body << '"'+expr_str+'"'
       res = self.connection.post('eval') do |req|
         req.headers['Content-Type'] = 'text/plain'
         req.body = body.join("\n")
