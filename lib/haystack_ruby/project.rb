@@ -68,6 +68,8 @@ module HaystackRuby
       res = self.connection.post('eval') do |req|
         req.headers['Content-Type'] = 'text/plain'
         req.body = body.join("\n")
+        puts 'REQ BODY!'
+        puts req.body
       end
       JSON.parse! res.body
     end
