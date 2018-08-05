@@ -61,7 +61,7 @@ module HaystackRuby
     end
 
     # this function will post expr_str exactly as encoded
-    def eval(expr_str)
+    def api_eval(expr_str)
       body = ["ver:\"#{@haystack_version}\""]
       body << "expr"
       body << expr
