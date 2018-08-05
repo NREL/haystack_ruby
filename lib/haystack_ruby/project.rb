@@ -68,15 +68,13 @@ module HaystackRuby
       res = self.connection.post('eval') do |req|
         req.headers['Content-Type'] = 'text/plain'
         req.body = body.join("\n")
-        puts 'REQ BODY!'
-        puts req.body
       end
       JSON.parse! res.body
     end
 
     # return meta data for all equip with related points
     def equip_point_meta
-      # begin
+      begin
         equips = read({filter: '"equip"'})['rows']
         puts equips
         equips.map! do |eq|
@@ -100,10 +98,10 @@ module HaystackRuby
           end
           eq
         end
-      # rescue Exception => e
+      rescue Exception => e
         puts "error: #{e}"
         nil
-      # end
+      end
     end
 
     def ops
