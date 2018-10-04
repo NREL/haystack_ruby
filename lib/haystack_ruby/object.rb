@@ -61,10 +61,10 @@ module HaystackRuby
             else
               raise HaystackRuby::Error, "unrecognized type for string val #{val}"
           end
+          set_fields val
         else
           raise HaystackRuby::Error, "unrecognized type for val #{val}"
         end
-      set_fields val
     end
   end
 end
