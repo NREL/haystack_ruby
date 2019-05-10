@@ -3,7 +3,7 @@ module HaystackRuby
     module Number
       def set_fields str_value
         @haystack_type = 'Number'
-        match = /\An:([-0-9\.]*)( .*)*\z/.match str_value
+        match = /\An:([-0-9E\-\.]*)( .*)*\z/.match str_value
         raise HaystackRuby::Error, "invalid HaystackRuby::Types::Number: #{str_value}" if match.nil?
         @value = match[1].to_f
         # also set unit if available
