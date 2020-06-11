@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.homepage = 'https://github.com/NREL/haystack_ruby'
   s.license = 'MIT'
   s.add_dependency 'faraday'
-  s.add_dependency 'activesupport'
+  s.add_dependency 'activesupport', '>= 5.2.4.3'
   s.add_dependency 'openssl'
   s.add_development_dependency "rspec"
   s.test_files = Dir.glob('spec/**/*')
