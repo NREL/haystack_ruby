@@ -54,7 +54,7 @@ module HaystackRuby
       body << params.keys.join(',')
       body << params.values.join(',')
       res = self.connection.post('read') do |req|
-        req.headers['Content-Type'] = 'text/plain'
+        req.headers['Content-Type'] = 'text/zinc'
         req.body = body.join("\n")
       end
       JSON.parse! res.body
@@ -66,7 +66,7 @@ module HaystackRuby
       body << "expr"
       body << '"'+expr_str+'"'
       res = self.connection.post('eval') do |req|
-        req.headers['Content-Type'] = 'text/plain'
+        req.headers['Content-Type'] = 'text/zinc'
         req.body = body.join("\n")
       end
       JSON.parse! res.body
@@ -118,7 +118,7 @@ module HaystackRuby
       puts 'grid = '
       pp grid.join "\n"
       res = self.connection.post('commit') do |req|
-        req.headers['Content-Type'] = 'text/plain'
+        req.headers['Content-Type'] = 'text/zinc'
         req.body = grid.join "\n"
       end
       JSON.parse! res.body
