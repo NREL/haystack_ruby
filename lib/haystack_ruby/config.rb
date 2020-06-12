@@ -15,7 +15,7 @@ module HaystackRuby
     def load!(path, environment = nil)
       require 'yaml'
       environment ||= Rails.env
-      conf = YAML.load(File.new(path).read).with_indifferent_access[environment]
+      conf = YAML.load(ERB.new(File.new(path).read).result).with_indifferent_access[environment]
       load_configuration(conf)
     end
   end
